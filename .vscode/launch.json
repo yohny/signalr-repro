@@ -12,12 +12,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "func: host start",
-      "program": "${command:azureFunctions.pickProcess}",
-      // "args": [],
-      // "cwd": "${workspaceFolder}",
-      // "console": "internalConsole",
-      // "launchSettingsFilePath": "${workspaceFolder}/src/YourApp/Properties/launchSettings.json",
-      // "launchSettingsProfile": "Sample"
+      "program": "${workspaceFolder}/bin/Debug/net10.0/signalr-repro.dll",
     }
   ]
 }
