@@ -6,6 +6,18 @@
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:azureFunctions.pickProcess}"
+    },
+    {
+      "name": "Launch .NET Functions",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "func: host start",
+      "program": "${command:azureFunctions.pickProcess}",
+      // "args": [],
+      // "cwd": "${workspaceFolder}",
+      // "console": "internalConsole",
+      // "launchSettingsFilePath": "${workspaceFolder}/src/YourApp/Properties/launchSettings.json",
+      // "launchSettingsProfile": "Sample"
     }
   ]
 }

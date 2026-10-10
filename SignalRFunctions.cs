@@ -17,11 +17,11 @@ public class SignalRFunctions
     [Function(nameof(Negotiate))]
     public IActionResult Negotiate(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
-        [SignalRConnectionInfoInput(HubName = "demohub", UserId = "ascii-only-value")] SignalRConnectionInfo connectionInfo)
+        // if UserId below is changed to a value that contains only ASCII characters, the SignalR Emulator is able to trigger connection event without problem. However, if the UserId contains non-ASCII characters, the SignalR Emulator fails to trigger connection event and the OnClientConnected function is never called.
+        [SignalRConnectionInfoInput(HubName = "demohub", UserId = "non-áščíí-value")] SignalRConnectionInfo connectionInfo)
     {
         _logger.LogInformation("SignalR negotiation called with URL: {url}, AccessToken: {accessToken}", connectionInfo.Url, connectionInfo.AccessToken);
         return new JsonResult(connectionInfo);
-
     }
 
     [Function(nameof(OnClientConnected))]
