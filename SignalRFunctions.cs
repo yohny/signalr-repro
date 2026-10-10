@@ -17,22 +17,12 @@ public class SignalRFunctions
     [Function(nameof(Negotiate))]
     public IActionResult Negotiate(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
-        [SignalRConnectionInfoInput(HubName = "demohub")] SignalRConnectionInfo connectionInfo)
+        [SignalRConnectionInfoInput(HubName = "demohub", UserId = "ascii-only-value")] SignalRConnectionInfo connectionInfo)
     {
         _logger.LogInformation("SignalR negotiation called with URL: {url}, AccessToken: {accessToken}", connectionInfo.Url, connectionInfo.AccessToken);
-        // return connectionInfo;
         return new JsonResult(connectionInfo);
 
     }
-
-    [Function(nameof(OnClientMessage))]
-    public static void OnClientMessage(
-        [SignalRTrigger("demohub", "messages", "sendMessage", "content")]
-        SignalRInvocationContext invocationContext, string content, FunctionContext functionContext)
-    {
-        var logger = functionContext.GetLogger(nameof(OnClientMessage));
-        logger.LogInformation("Connection {connectionId} sent a message. Message content: {content}", invocationContext.ConnectionId, content);
-    }   
 
     [Function(nameof(OnClientConnected))]
     public static void OnClientConnected(

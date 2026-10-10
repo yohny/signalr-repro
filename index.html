@@ -128,10 +128,6 @@
         SignalR Hub endpoint
         <input id="endpoint" type="url" value="http://localhost:7071/api" required>
       </label>
-      <label>
-        Hub event to listen for
-        <input id="event-name" type="text" value="message" required>
-      </label>
       <div class="actions">
         <button id="connect" type="submit">Connect</button>
         <button id="disconnect" class="secondary" type="button" disabled>Disconnect</button>
@@ -147,7 +143,6 @@
   <script>
     const form = document.querySelector("#connection-form");
     const endpointInput = document.querySelector("#endpoint");
-    const eventInput = document.querySelector("#event-name");
     const status = document.querySelector("#status");
     const connectButton = document.querySelector("#connect");
     const disconnectButton = document.querySelector("#disconnect");
@@ -174,21 +169,17 @@
       log(`Attempting to connect to ${endpointInput.value}`);
 
       try {
-        const eventName = eventInput.value.trim();
         const nextConnection = new signalR.HubConnectionBuilder()
           .withUrl(endpointInput.value)
           .withAutomaticReconnect()
           .build();
 
-        nextConnection.on(eventName, (payload) => {
-          log(`${eventName}: ${JSON.stringify(payload)}`);
-        });
         nextConnection.onreconnecting((error) => {
           setStatus("Reconnecting");
           log(`Connection lost; reconnecting${error ? `: ${error.message}` : ""}`);
         });
         nextConnection.onreconnected((connectionId) => {
-          setStatus("Connected");
+          setStatus("Reconnected");
           log(`Reconnected${connectionId ? ` (connection ${connectionId})` : ""}`);
         });
         nextConnection.onclose((error) => {
@@ -203,7 +194,7 @@
         connection = nextConnection;
         disconnectButton.disabled = false;
         setStatus("Connected");
-        log(`Connected; listening for "${eventName}" events.`);
+        log(`Connected (connection ${connection.connectionId})`);
       } catch (error) {
         connection = undefined;
         connectButton.disabled = false;
